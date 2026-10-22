@@ -8,6 +8,8 @@ import EmptyState from "@/components/EmptyState";
 interface Props {
   events: ContractEvent[];
   specs?: ContractEventSpec[];
+  /** Whether a Postgres-backed indexer is configured (its history is not limited to the RPC retention window). */
+  indexed?: boolean;
 }
 
 function linkifyAddresses(text: string): React.ReactNode {
@@ -41,11 +43,13 @@ function linkifyAddresses(text: string): React.ReactNode {
   return parts.length > 0 ? parts : text;
 }
 
-export default function EventLog({ events, specs = [] }: Props) {
+export default function EventLog({ events, specs = [], indexed = false }: Props) {
   if (events.length === 0) {
     return (
       <EmptyState>
-        No events emitted by this contract in the last ~24h (the RPC node&apos;s retention window).
+        {indexed
+          ? "No events emitted by this contract yet."
+          : "No events emitted by this contract in the last ~24h (the RPC node's retention window)."}
       </EmptyState>
     );
   }

@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { isIndexerConfigured } from "@/lib/indexed-db";
 import EventLog from "./EventLog";
 import type { ContractEvent, ContractEventSpec } from "@/types";
-
 interface Props {
   contractId: string;
   initialEvents: ContractEvent[];
@@ -34,5 +34,5 @@ export default function LiveEventLog({
     return () => clearInterval(id);
   }, [contractId, intervalMs]);
 
-  return <EventLog events={events} specs={specs} />;
+  return <EventLog events={events} specs={specs} indexed={isIndexerConfigured()} />;
 }
